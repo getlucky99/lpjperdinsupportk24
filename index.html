@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplikasi Perjalanan Dinas - Apotek K24</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- ========== LOGIN SCREEN ========== -->
+  <div id="login-screen" style="display:flex; min-height:100vh; align-items:center; justify-content:center; background:linear-gradient(135deg,#e8f5e5 0%,#f0faf0 50%,#fff8e1 100%); position:relative; overflow:hidden;">
+    <div style="position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle at 20% 20%,rgba(45,143,30,0.08) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(245,196,0,0.1) 0%,transparent 50%)"></div>
+    <div class="login-card">
+      <div class="login-header">
+        <div class="logo-container">
+          <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAH" id="login-logo-placeholder" class="login-logo-img" alt="Apotek K24" style="display:none">
+          <div id="login-logo-real" class="login-logo-wrap"></div>
+        </div>
+        <h1 class="login-title">Perjalanan Dinas</h1>
+        <p class="login-subtitle">Sistem Laporan Pertanggungjawaban IT Support</p>
+      </div>
+
+      <div class="demo-banner">
+        <i class="fas fa-circle-info"></i>
+        <span>
+          <strong>Mode Demo</strong> — Login: <strong>support</strong> / <strong>123</strong> (IT Pelaksana)
+          atau <strong>admin123</strong> / <strong>admin123</strong> (Super Admin).
+        </span>
+      </div>
+
+      <div class="login-form">
+        <div class="form-group">
+          <label for="username">Nama Pengguna</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user input-icon"></i>
+            <input type="text" id="username" placeholder="Masukkan nama pengguna" autocomplete="off">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Kata Sandi</label>
+          <div class="input-wrapper">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="password" placeholder="Masukkan kata sandi">
+            <button class="toggle-pw" type="button" onclick="togglePassword()"><i class="fas fa-eye" id="pw-icon"></i></button>
+          </div>
+        </div>
+        <button class="btn-primary btn-full btn-login" type="button" onclick="doLogin()">
+          <i class="fas fa-right-to-bracket"></i> Masuk
+        </button>
+      </div>
+
+      <div class="login-footer">
+        <p>Aplikasi Laporan Perjalanan Dinas <span class="version-badge">Beta 0726.1</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== APP SCREEN ========== -->
+  <div id="app-screen" style="display:none; min-height:100vh;">
+    <div class="main-app">
+
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div id="sidebar-logo-wrap" class="sidebar-logo-img-wrap"></div>
+          </div>
+          <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        </div>
+        <div class="user-info-sidebar">
+          <div class="user-avatar" id="user-avatar-sidebar">AN</div>
+          <div class="user-details" id="user-details-sidebar">
+            <span class="user-name-sidebar">-</span>
+            <span class="user-role-sidebar badge-role">-</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="#" class="nav-item active" onclick="showPage('dashboard')">
+            <i class="fas fa-house"></i><span>Dashboard</span>
+          </a>
+          <a href="#" class="nav-item" onclick="showPage('laporan-list')">
+            <i class="fas fa-folder-open"></i><span>Laporan Saya</span>
+          </a>
+          <a href="#" class="nav-item" onclick="showPage('settings')">
+            <i class="fas fa-gear"></i><span>Pengaturan</span>
+          </a>
+          <a href="#" class="nav-item" onclick="showPage('about')">
+            <i class="fas fa-circle-info"></i><span>Tentang</span>
+          </a>
+          <a href="#" class="nav-item nav-logout" onclick="doLogout()">
+            <i class="fas fa-right-from-bracket"></i><span>Keluar</span>
+          </a>
+        </nav>
+        <div class="sidebar-demo-indicator" id="sidebar-demo">
+          <i class="fas fa-database"></i><span id="sidebar-mode-text">Mode Demo</span>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content" id="main-content">
+
+        <!-- ===== DASHBOARD ===== -->
+        <div id="page-dashboard" class="page active">
+          <div class="page-header">
+            <div>
+              <h2 class="page-title">Dashboard</h2>
+              <p class="page-subtitle" id="dash-greeting">Selamat datang!</p>
+            </div>
+            <div class="header-actions">
+              <span class="demo-chip"><i class="fas fa-flask"></i> Demo Mode</span>
+            </div>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon green"><i class="fas fa-file-circle-check"></i></div>
+              <div class="stat-info"><span class="stat-number" id="stat-selesai">0</span><span class="stat-label">Laporan Selesai</span></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon yellow"><i class="fas fa-file-pen"></i></div>
+              <div class="stat-info"><span class="stat-number" id="stat-draft">0</span><span class="stat-label">Draft</span></div>
+            </div>
+          </div>
+          <div class="dashboard-actions">
+            <button class="action-card" onclick="startNewLaporan()">
+              <div class="action-icon"><i class="fas fa-plus-circle"></i></div>
+              <div class="action-text">
+                <span class="action-title">Buat Laporan Baru</span>
+                <span class="action-desc">Mulai perjalanan dinas baru</span>
+              </div>
+              <i class="fas fa-chevron-right action-arrow"></i>
+            </button>
+            <button class="action-card" onclick="showPage('laporan-list')">
+              <div class="action-icon orange"><i class="fas fa-folder-open"></i></div>
+              <div class="action-text">
+                <span class="action-title">Buka Laporan Lama</span>
+                <span class="action-desc">Lihat &amp; edit laporan sebelumnya</span>
+              </div>
+              <i class="fas fa-chevron-right action-arrow"></i>
+            </button>
+          </div>
+          <div class="recent-section">
+            <h3 class="section-title">Laporan Terbaru</h3>
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead><tr><th>ID Perjalanan</th><th>Tujuan</th><th>Tanggal</th><th>Kategori</th><th>Status</th><th>Aksi</th></tr></thead>
+                <tbody id="recent-table-body"><tr class="empty-row"><td colspan="6">Belum ada laporan. Mulai buat laporan baru!</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== LAPORAN LIST ===== -->
+        <div id="page-laporan-list" class="page">
+          <div class="page-header">
+            <div><h2 class="page-title">Laporan Perjalanan</h2><p class="page-subtitle">Riwayat semua laporan perjalanan dinas</p></div>
+            <button class="btn-primary" onclick="startNewLaporan()"><i class="fas fa-plus"></i> Buat Baru</button>
+          </div>
+          <div class="filter-bar">
+            <div class="filter-group"><label>Dari Tanggal</label><input type="date" id="filter-from" onchange="filterLaporan()"></div>
+            <div class="filter-group"><label>Sampai Tanggal</label><input type="date" id="filter-to" onchange="filterLaporan()"></div>
+            <div class="filter-group"><label>Tujuan</label><input type="text" id="filter-tujuan" placeholder="Cari tujuan..." oninput="filterLaporan()"></div>
+            <div class="filter-group"><label>Status</label>
+              <select id="filter-status" onchange="filterLaporan()">
+                <option value="">Semua</option><option value="Draft">Draft</option><option value="Selesai">Selesai</option>
+              </select>
+            </div>
+            <button class="btn-outline" onclick="clearFilter()"><i class="fas fa-rotate"></i> Reset</button>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead><tr><th>ID Perjalanan</th><th>IT Pelaksana</th><th>Tujuan</th><th>Tgl Mulai</th><th>Tgl Selesai</th><th>Kategori</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody id="laporan-table-body"><tr class="empty-row"><td colspan="8">Belum ada laporan.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ===== FORM WIZARD ===== -->
+        <div id="page-form" class="page">
+          <div class="page-header">
+            <div>
+              <button class="btn-back" onclick="confirmBack()"><i class="fas fa-arrow-left"></i> Kembali</button>
+              <h2 class="page-title" id="form-title">Buat Laporan Baru</h2>
+              <p class="page-subtitle" id="form-id-display">ID akan digenerate otomatis</p>
+            </div>
+            <div class="step-indicator">
+              <div class="step active" id="step-0"><span class="step-num">1</span><span class="step-label">Inisiasi</span></div>
+              <div class="step-line"></div>
+              <div class="step" id="step-1"><span class="step-num">2</span><span class="step-label">RAD</span></div>
+              <div class="step-line"></div>
+              <div class="step" id="step-2"><span class="step-num">3</span><span class="step-label">RPD</span></div>
+              <div class="step-line"></div>
+              <div class="step" id="step-3"><span class="step-num">4</span><span class="step-label">Tanpa Nota</span></div>
+              <div class="step-line"></div>
+              <div class="step" id="step-4"><span class="step-num">5</span><span class="step-label">Finalisasi</span></div>
+            </div>
+          </div>
+
+          <!-- Step 0 -->
+          <div id="form-step-0" class="form-step active">
+            <div class="form-card">
+              <h3 class="card-title"><i class="fas fa-circle-info"></i> Tahap 1 — Informasi Dasar Perjalanan</h3>
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label>IT Pelaksana (Penanggung Jawab) <span class="required">*</span></label>
+                  <div id="pelaksana-list" class="pelaksana-list"></div>
+                  <button class="btn-add-row" type="button" onclick="addPelaksana()"><i class="fas fa-plus"></i> Tambah IT Pelaksana</button>
+                </div>
+                <div class="form-group"><label>Tanggal Mulai <span class="required">*</span></label><input type="date" id="tgl-mulai"></div>
+                <div class="form-group"><label>Tanggal Selesai <span class="required">*</span></label><input type="date" id="tgl-selesai"></div>
+                <div class="form-group">
+                  <label>Kategori Dinas <span class="required">*</span></label>
+                  <div class="select-with-manage">
+                    <select id="kategori-dinas"><option value="">-- Pilih Kategori --</option></select>
+                    <button class="btn-icon-sm" type="button" onclick="showKategoriManager()" title="Kelola Kategori"><i class="fas fa-cog"></i></button>
+                  </div>
+                </div>
+                <div class="form-group full-width">
+                  <label>Tujuan <span class="required">*</span></label>
+                  <div id="tujuan-list"></div>
+                  <button class="btn-add-row" type="button" onclick="addTujuan()" style="margin-top:6px"><i class="fas fa-plus"></i> Tambah Tujuan</button>
+                </div>
+                <div class="form-group full-width">
+                  <label>Keterangan <span style="color:var(--text-muted);font-weight:400;font-size:11px">(opsional)</span></label>
+                  <textarea id="keterangan-umum" rows="3"
+                    placeholder="Tuliskan keterangan tambahan mengenai perjalanan dinas ini..."
+                    style="resize:vertical;min-height:72px;font-family:var(--font-main);font-size:13px;line-height:1.6;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;width:100%;outline:none;transition:border-color 0.2s,box-shadow 0.2s;color:var(--text-primary);background:white"
+                    onfocus="this.style.borderColor='var(--k24-green)';this.style.boxShadow='0 0 0 3px rgba(45,143,30,0.12)'"
+                    onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'"></textarea>
+                </div>
+                <div class="form-group full-width">
+                  <label>Jenis Anggaran</label>
+                  <div class="anggaran-options">
+                    <label class="radio-option"><input type="radio" name="jenis-anggaran" value="Beban Dept/Divisi" onchange="toggleAnggaranInput()"><span class="radio-custom"></span>Beban Dept / Divisi<input type="text" id="beban-dept-input" class="inline-input hidden" placeholder="Misal: Finance CO"></label>
+                    <label class="radio-option"><input type="radio" name="jenis-anggaran" value="Ditagihkan"    onchange="toggleAnggaranInput()"><span class="radio-custom"></span>Ditagihkan</label>
+                    <label class="radio-option"><input type="radio" name="jenis-anggaran" value="Potong Deposit" onchange="toggleAnggaranInput()"><span class="radio-custom"></span>Potong Deposit</label>
+                  </div>
+                </div>
+                <div class="form-group"><label>Atasan Langsung</label><input type="text" id="atasan-langsung" placeholder="Nama atasan langsung"></div>
+                <div class="form-group"><label>Pimpinan Dept</label><input type="text" id="pimpinan-dept" placeholder="Nama pimpinan departemen"></div>
+                <div class="form-group"><label>Manager F &amp; A</label><input type="text" id="manager-fa" placeholder="Nama Manager F & A"></div>
+              </div>
+              <div class="form-actions">
+                <span></span>
+                <button class="btn-primary" type="button" onclick="saveStep0()">Simpan &amp; Lanjut <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 1: RAD -->
+          <div id="form-step-1" class="form-step">
+            <div class="form-card">
+              <h3 class="card-title"><i class="fas fa-calculator"></i> Tahap 2 — Input RAD (Rencana Anggaran Dinas)</h3>
+              <p class="card-desc">Masukkan rencana biaya perjalanan dinas.</p>
+              <div class="table-scroll-sticky">
+                <table class="input-table">
+                  <thead id="rad-thead"><tr><th>No</th><th>Detail Perjalanan</th><th>Kategori Perjalanan</th><th>QTY</th><th>Satuan (Rp)</th><th>Sub Total</th><th>Keterangan</th><th></th></tr></thead>
+                  <tbody id="rad-tbody"></tbody>
+                  <tfoot><tr><td colspan="5" class="total-label">TOTAL</td><td colspan="3" class="total-value" id="rad-total">Rp 0</td></tr></tfoot>
+                </table>
+              </div>
+              <div class="table-action-sticky">
+                <button class="btn-add-row" type="button" onclick="addRADRow()"><i class="fas fa-plus"></i> Tambah Baris</button>
+              </div>
+              <div class="rad-preview-section" id="rad-preview-section" style="display:none">
+                <h4>Preview Rencana Anggaran</h4>
+                <table class="preview-table">
+                  <thead><tr><th>No</th><th>Kategori Perjalanan</th><th>QTY</th><th>Harga Satuan</th><th>Anggaran</th></tr></thead>
+                  <tbody id="rad-preview-tbody"></tbody>
+                  <tfoot><tr><td colspan="4" class="total-label">TOTAL</td><td class="total-value" id="rad-preview-total">Rp 0</td></tr></tfoot>
+                </table>
+              </div>
+              <div class="rad-bottom-row">
+                <div class="form-group" style="width:fit-content;min-width:0">
+                  <label>Tanggal Pencairan Dana</label>
+                  <input type="date" id="tgl-pencairan" style="width:200px">
+                  <span class="hint-text" id="reimburse-hint" style="display:none;color:#e67e22"><i class="fas fa-triangle-exclamation"></i> Anda akan Reimburse Anggaran</span>
+                </div>
+                <div class="form-group" style="justify-content:flex-end">
+                  <label style="opacity:0;user-select:none">Kategori</label>
+                  <button class="btn-outline btn-sm" type="button" onclick="showKategoriPerjalananManager()"><i class="fas fa-tags"></i> Kelola Kategori Perjalanan</button>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button class="btn-outline" type="button" onclick="goToStep(0)"><i class="fas fa-arrow-left"></i> Kembali</button>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                  <button class="btn-primary" type="button" onclick="saveStep1()">Simpan &amp; Lanjut <i class="fas fa-arrow-right"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: RPD -->
+          <div id="form-step-2" class="form-step">
+            <div class="form-card">
+              <h3 class="card-title"><i class="fas fa-receipt"></i> Tahap 3 — Input RPD (Realisasi Perjalanan Dinas)</h3>
+              <p class="card-desc">Masukkan biaya aktual di lapangan.</p>
+              <!-- Filter RPD — sticky di atas tabel -->
+              <div id="rpd-filter-bar" class="rpd-filter-bar rpd-filter-sticky" style="display:none">
+                <div class="filter-group">
+                  <label>Filter IT Pelaksana</label>
+                  <select id="rpd-filter-pelaksana" onchange="renderRPDTable()">
+                    <option value="">— Semua Pelaksana —</option>
+                  </select>
+                </div>
+                <div class="filter-group">
+                  <label>Filter Tujuan</label>
+                  <select id="rpd-filter-tujuan" onchange="renderRPDTable()">
+                    <option value="">— Semua Tujuan —</option>
+                  </select>
+                </div>
+                <button class="btn-outline btn-sm" type="button" onclick="resetRPDFilter()" style="align-self:flex-end"><i class="fas fa-rotate-left"></i> Reset Filter</button>
+              </div>
+              <div class="table-scroll-sticky">
+                <table class="input-table">
+                  <thead id="rpd-thead"><tr><th>No</th><th>Detail Perjalanan</th><th>Kategori</th><th>Tanggal</th><th>QTY</th><th>Satuan RAD</th><th>Realisasi/Satuan (Rp)</th><th>Sub Total</th><th>Keterangan</th><th>Upload Nota</th><th></th></tr></thead>
+                  <tbody id="rpd-tbody"></tbody>
+                  <tfoot><tr><td colspan="6" class="total-label">TOTAL REALISASI</td><td colspan="5" class="total-value" id="rpd-total">Rp 0</td></tr></tfoot>
+                </table>
+              </div>
+              <div class="table-action-sticky rpd-action-row">
+                <button class="btn-add-row" type="button" onclick="addRPDRow()"><i class="fas fa-plus"></i> Tambah Baris</button>
+                <button class="btn-sinkron" type="button" onclick="sinkronRAD()"><i class="fas fa-rotate"></i> Sinkron RAD</button>
+              </div>
+              <div class="comparison-section" id="comparison-section">
+                <h4>Perbandingan RAD vs RPD</h4>
+                <div id="comparison-table-wrapper"></div>
+                <div id="overbudget-warning" class="alert-warning" style="display:none"><i class="fas fa-triangle-exclamation"></i> Realisasi melebihi rencana anggaran!</div>
+              </div>
+              <div class="form-actions">
+                <button class="btn-outline" type="button" onclick="goToStep(1)"><i class="fas fa-arrow-left"></i> Kembali</button>
+                <button class="btn-primary" type="button" onclick="saveStep2()">Simpan &amp; Lanjut <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Tanpa Nota -->
+          <div id="form-step-3" class="form-step">
+            <div class="form-card">
+              <h3 class="card-title"><i class="fas fa-coins"></i> Tahap 4 — Pengeluaran Tanpa Nota</h3>
+              <p class="card-desc">Biaya kecil yang sulit didapat notanya (ojek pangkalan, tip, parkir, dll).</p>
+              <div class="table-scroll">
+                <table class="input-table">
+                  <thead><tr><th>No</th><th>Rincian Pengeluaran</th><th>QTY</th><th>Harga Satuan (Rp)</th><th>Jumlah</th><th></th></tr></thead>
+                  <tbody id="nota-tbody"></tbody>
+                  <tfoot><tr><td colspan="4" class="total-label">TOTAL</td><td colspan="2" class="total-value" id="nota-total">Rp 0</td></tr></tfoot>
+                </table>
+              </div>
+              <button class="btn-add-row" type="button" onclick="addNotaRow()"><i class="fas fa-plus"></i> Tambah Baris</button>
+              <p class="nota-hint"><i class="fas fa-lightbulb"></i> Pilih dari dropdown untuk mengambil data RPD secara otomatis.</p>
+              <div class="form-actions">
+                <button class="btn-outline" type="button" onclick="goToStep(2)"><i class="fas fa-arrow-left"></i> Kembali</button>
+                <button class="btn-primary" type="button" onclick="saveStep3()">Simpan &amp; Lanjut <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4: Finalisasi -->
+          <div id="form-step-4" class="form-step">
+            <div class="form-card">
+              <h3 class="card-title"><i class="fas fa-flag-checkered"></i> Tahap 5 — Finalisasi LPJ</h3>
+              <div class="resume-grid" id="resume-content"></div>
+              <div class="form-actions export-actions">
+                <button class="btn-outline" type="button" onclick="goToStep(3)"><i class="fas fa-arrow-left"></i> Kembali</button>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                  <button class="btn-outline" type="button" onclick="printLaporan('detail')"><i class="fas fa-print"></i> Cetak Detail</button>
+                  <button class="btn-outline" type="button" onclick="printLaporan('fa')"><i class="fas fa-print"></i> Cetak FA</button>
+                  <button class="btn-outline" type="button" onclick="printLaporan('tanpa-nota')"><i class="fas fa-print"></i> Cetak Tanpa Nota</button>
+                  <button class="btn-outline" type="button" onclick="downloadNota()"><i class="fas fa-cloud-arrow-down"></i> Download Nota</button>
+                  <button class="btn-success" type="button" onclick="finalizeLaporan()"><i class="fas fa-circle-check"></i> Selesaikan Laporan</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== SETTINGS ===== -->
+        <div id="page-settings" class="page">
+          <div class="page-header"><div><h2 class="page-title">Pengaturan</h2><p class="page-subtitle">Kelola profil pengguna dan koneksi database</p></div></div>
+
+          <!-- Profil Saya (semua role bisa lihat) -->
+          <div class="form-card" id="settings-profile-card">
+            <h3 class="card-title"><i class="fas fa-user-circle"></i> Profil Saya</h3>
+            <div class="form-grid">
+              <div class="form-group"><label>Nama</label><input type="text" id="setting-nama"></div>
+              <div class="form-group"><label>Divisi</label><input type="text" id="setting-divisi"></div>
+              <div class="form-group"><label>Jabatan</label><input type="text" id="setting-jabatan"></div>
+              <div class="form-group"><label>Role</label>
+                <select id="setting-role">
+                  <option value="IT Pelaksana">IT Pelaksana</option>
+                  <option value="IT Administrasi">IT Administrasi</option>
+                  <option value="IT Koordinator">IT Koordinator</option>
+                  <option value="Super Admin">Super Admin</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Nama Bank</label><input type="text" id="setting-bank"></div>
+              <div class="form-group"><label>No. Rekening</label><input type="text" id="setting-rek"></div>
+              <div class="form-group"><label>Cabang</label><input type="text" id="setting-cabang"></div>
+              <div class="form-group"><label>Atas Nama Rekening</label><input type="text" id="setting-atas-nama"></div>
+            </div>
+            <!-- Reset Password Sendiri -->
+            <div class="reset-pw-section">
+              <h4 class="section-sub-title"><i class="fas fa-key"></i> Ganti Password Saya</h4>
+              <div class="reset-pw-form">
+                <div class="form-group">
+                  <label>Password Baru</label>
+                  <div class="input-wrapper">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="setting-new-pw" placeholder="Masukkan password baru">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Konfirmasi Password</label>
+                  <div class="input-wrapper">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="setting-confirm-pw" placeholder="Ulangi password baru">
+                  </div>
+                </div>
+                <button class="btn-outline btn-sm" type="button" onclick="resetPasswordSendiri()"><i class="fas fa-key"></i> Ganti Password</button>
+              </div>
+            </div>
+            <div class="form-actions" style="margin-top:16px">
+              <span></span>
+              <button class="btn-primary" type="button" onclick="saveUserSettings()"><i class="fas fa-save"></i> Simpan Profil</button>
+            </div>
+          </div>
+
+          <!-- Manajemen User (Super Admin & IT Koordinator) -->
+          <div class="form-card" id="settings-usermgmt-card" style="display:none">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+              <h3 class="card-title" style="margin:0"><i class="fas fa-users-gear"></i> Manajemen Pengguna</h3>
+              <button class="btn-primary btn-sm" type="button" onclick="showAddUserModal()"><i class="fas fa-user-plus"></i> Daftarkan User Baru</button>
+            </div>
+            <div class="table-wrapper">
+              <table class="data-table" id="user-mgmt-table">
+                <thead><tr><th>Nama</th><th>Username</th><th>Jabatan</th><th>Divisi</th><th>Role</th><th>Bank</th><th>Aksi</th></tr></thead>
+                <tbody id="user-mgmt-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Koneksi Database -->
+          <div class="form-card">
+            <h3 class="card-title"><i class="fas fa-database"></i> Koneksi Database</h3>
+            <p class="card-desc">Hubungkan ke Google Spreadsheet sebagai database.</p>
+            <div class="form-grid">
+              <div class="form-group full-width"><label>URL Google API / Apps Script</label><input type="url" id="setting-api-url" placeholder="https://script.google.com/macros/s/.../exec"></div>
+              <div class="form-group"><label>Spreadsheet ID</label><input type="text" id="setting-sheet-id" placeholder="1BxiMVs0XRA5..."></div>
+              <div class="form-group"><label>Google Drive Folder ID</label><input type="text" id="setting-drive-id" placeholder="ID folder untuk nota"></div>
+            </div>
+            <div class="btn-group">
+              <button class="btn-primary" type="button" onclick="saveDbSettings()"><i class="fas fa-save"></i> Simpan Konfigurasi</button>
+              <button class="btn-outline" type="button" onclick="testConnection()"><i class="fas fa-plug"></i> Test Koneksi</button>
+            </div>
+            <div id="connection-status" class="connection-status" style="display:none"></div>
+          </div>
+        </div>
+
+        <!-- ===== ABOUT ===== -->
+        <div id="page-about" class="page">
+          <div class="page-header"><div><h2 class="page-title">Tentang Aplikasi</h2></div></div>
+          <div class="about-card form-card">
+
+            <!-- Logo K24 di atas Sang Petualang -->
+            <div class="about-logo-section">
+              <div id="about-logo-wrap" class="about-logo-img-wrap"></div>
+            </div>
+
+            <div class="about-petualang">
+              <div class="petualang-icon"><i class="fas fa-map-location-dot fa-3x"></i></div>
+              <div class="petualang-text">
+                <div class="petualang-title">Sang Petualang</div>
+                <div class="petualang-sub">Menjelajahi dunia, memberi makna, menginspirasi</div>
+              </div>
+            </div>
+
+            <div class="about-info">
+              <h3>Aplikasi Laporan Perjalanan Dinas</h3>
+              <p class="version-chip">Versi Beta 0726.1</p>
+              <div class="about-desc"><p>Aplikasi ini dirancang untuk memudahkan staf IT Apotek K24 dalam membuat, mengelola, dan mencetak Laporan Pertanggungjawaban (LPJ) perjalanan dinas secara digital.</p></div>
+            </div>
+
+            <div class="guide-section">
+              <h4><i class="fas fa-book-open"></i> Panduan Singkat</h4>
+              <ol class="guide-list">
+                <li><strong>Login</strong> — Masukkan nama pengguna dan kata sandi.</li>
+                <li><strong>Buat Laporan Baru</strong> — Dari Dashboard, klik "Buat Laporan Baru" lalu ikuti 5 tahap.</li>
+                <li><strong>Tahap 1</strong> — Isi informasi dasar perjalanan (pelaksana, tanggal, tujuan).</li>
+                <li><strong>Tahap 2 (RAD)</strong> — Input rencana anggaran dinas.</li>
+                <li><strong>Tahap 3 (RPD)</strong> — Input realisasi biaya aktual + upload nota.</li>
+                <li><strong>Tahap 4</strong> — Input pengeluaran tanpa nota (ojek, tip, parkir).</li>
+                <li><strong>Tahap 5</strong> — Review, cetak, dan finalisasi laporan.</li>
+              </ol>
+            </div>
+
+            <div class="contact-section">
+              <h4><i class="fas fa-headset"></i> Kontak Admin/IT</h4>
+              <p>Jika terjadi kendala teknis, hubungi <strong>Sang Petualang</strong>:</p>
+              <p><strong>Email:</strong> <a href="mailto:amin.nurdin@k24.co.id" style="color:var(--k24-green);text-decoration:none">amin.nurdin@k24.co.id</a></p>
+            </div>
+
+            <p class="copyright">&copy; 2026 Apotek K24 Indonesia — IT Support Division. All rights reserved.</p>
+          </div>
+        </div>
+
+      </main>
+    </div><!-- end .main-app -->
+  </div><!-- end #app-screen -->
+
+  <!-- ===== MODALS ===== -->
+  <div id="modal-kategori" class="modal-overlay" style="display:none" onclick="closeModal('modal-kategori')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3><i class="fas fa-tags"></i> Kelola Kategori Dinas</h3>
+        <button class="modal-close" onclick="closeModal('modal-kategori')"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <ul class="category-list" id="kategori-list-modal"></ul>
+        <div class="add-category-form">
+          <input type="text" id="new-kategori-input" placeholder="Nama kategori baru...">
+          <button class="btn-primary btn-sm" type="button" onclick="addKategori()"><i class="fas fa-plus"></i> Tambah</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-kategori-perjalanan" class="modal-overlay" style="display:none" onclick="closeModal('modal-kategori-perjalanan')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3><i class="fas fa-tags"></i> Kelola Kategori Perjalanan</h3>
+        <button class="modal-close" onclick="closeModal('modal-kategori-perjalanan')"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <ul class="category-list" id="kategori-perjalanan-list-modal"></ul>
+        <div class="add-category-form">
+          <input type="text" id="new-kategori-perjalanan-input" placeholder="Nama kategori perjalanan...">
+          <button class="btn-primary btn-sm" type="button" onclick="addKategoriPerjalanan()"><i class="fas fa-plus"></i> Tambah</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast-container"></div>
+
+  <!-- Print Overlay -->
+  <div id="print-overlay" class="print-overlay hidden">
+    <div class="print-content" id="print-content"></div>
+  </div>
+
+  <!-- Modal: Add / Edit User -->
+  <div id="modal-add-user" class="modal-overlay" style="display:none" onclick="closeModal('modal-add-user')">
+    <div class="modal-box modal-md" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3><i class="fas fa-user-plus"></i> <span id="modal-user-title">Daftarkan User Baru</span></h3>
+        <button class="modal-close" onclick="closeModal('modal-add-user')"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-user-idx">
+        <div class="form-grid">
+          <div class="form-group"><label>Nama Lengkap <span class="required">*</span></label><input type="text" id="mu-nama" placeholder="Nama lengkap"></div>
+          <div class="form-group"><label>Username <span class="required">*</span></label><input type="text" id="mu-username" placeholder="Username untuk login" autocomplete="off"></div>
+          <div class="form-group"><label>Password <span class="required">*</span></label>
+            <div class="input-wrapper">
+              <i class="fas fa-lock input-icon"></i>
+              <input type="password" id="mu-password" placeholder="Password" autocomplete="new-password">
+              <button class="toggle-pw" type="button" onclick="togglePwField('mu-password','mu-pw-icon')"><i class="fas fa-eye" id="mu-pw-icon"></i></button>
+            </div>
+          </div>
+          <div class="form-group"><label>Jabatan</label><input type="text" id="mu-jabatan" placeholder="Jabatan"></div>
+          <div class="form-group"><label>Divisi</label><input type="text" id="mu-divisi" placeholder="Divisi"></div>
+          <div class="form-group"><label>Role <span class="required">*</span></label>
+            <select id="mu-role">
+              <option value="IT Pelaksana">IT Pelaksana</option>
+              <option value="IT Administrasi">IT Administrasi</option>
+              <option value="IT Koordinator">IT Koordinator</option>
+              <option value="Super Admin">Super Admin</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Nama Bank</label><input type="text" id="mu-bank"></div>
+          <div class="form-group"><label>No. Rekening</label><input type="text" id="mu-rek"></div>
+          <div class="form-group"><label>Cabang</label><input type="text" id="mu-cabang"></div>
+          <div class="form-group full-width"><label>Atas Nama Rekening</label><input type="text" id="mu-atasnama"></div>
+        </div>
+        <div class="form-actions" style="margin-top:16px">
+          <button class="btn-outline" type="button" onclick="closeModal('modal-add-user')">Batal</button>
+          <button class="btn-primary" type="button" onclick="saveUserModal()"><i class="fas fa-save"></i> Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Reset Password User Lain -->
+  <div id="modal-reset-pw" class="modal-overlay" style="display:none" onclick="closeModal('modal-reset-pw')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3><i class="fas fa-key"></i> Reset Password</h3>
+        <button class="modal-close" onclick="closeModal('modal-reset-pw')"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom:12px;color:var(--text-secondary);font-size:13px">Reset password untuk: <strong id="reset-pw-nama"></strong></p>
+        <input type="hidden" id="reset-pw-idx">
+        <div class="form-group">
+          <label>Password Baru <span class="required">*</span></label>
+          <div class="input-wrapper">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="reset-pw-new" placeholder="Masukkan password baru">
+            <button class="toggle-pw" type="button" onclick="togglePwField('reset-pw-new','reset-pw-icon')"><i class="fas fa-eye" id="reset-pw-icon"></i></button>
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:12px">
+          <label>Konfirmasi Password <span class="required">*</span></label>
+          <div class="input-wrapper">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="reset-pw-confirm" placeholder="Ulangi password baru">
+          </div>
+        </div>
+        <div class="form-actions" style="margin-top:16px">
+          <button class="btn-outline" type="button" onclick="closeModal('modal-reset-pw')">Batal</button>
+          <button class="btn-primary" type="button" onclick="doResetPassword()"><i class="fas fa-key"></i> Reset Password</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
